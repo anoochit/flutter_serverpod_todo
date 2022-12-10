@@ -1,0 +1,22 @@
+version: '3.7'
+
+services:
+  postgres:
+    image: postgres:14.1
+    ports:
+      - '8090:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: todos
+      POSTGRES_PASSWORD: "6zOS4G2RSnYJMy__RShiicbQSlEUMSrg"
+    volumes:
+      - todos_data:/var/lib/postgresql/data
+  redis:
+    image: redis:6.2.6
+    ports:
+      - '8091:6379'
+    command: redis-server --requirepass "Ed8rHD3O8LeRBLXqd7_myp-KhAJXiy0r"
+    environment:
+      - REDIS_REPLICATION_MODE=master
+volumes:
+  todos_data:

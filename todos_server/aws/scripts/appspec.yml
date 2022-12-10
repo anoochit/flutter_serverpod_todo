@@ -1,0 +1,16 @@
+version: 0.0
+os: linux
+files:
+  - source: /vendor/
+    destination: /home/ec2-user/serverpod/upload/vendor/
+  - source: /todos_server/
+    destination: /home/ec2-user/serverpod/upload/todos_server/
+hooks:
+  BeforeInstall:
+    - location: todos_server/aws/scripts/install_dependencies
+      timeout: 300
+      runas: root
+  ApplicationStart:
+    - location: todos_server/aws/scripts/start_server
+      timeout: 300
+      runas: root
