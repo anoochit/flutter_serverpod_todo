@@ -8,7 +8,9 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../endpoints/example_endpoint.dart' as _i2;
-import 'package:serverpod_auth_server/module.dart' as _i3;
+import '../endpoints/todo_endpoint.dart' as _i3;
+import 'package:todos_server/src/generated/todo_class.dart' as _i4;
+import 'package:serverpod_auth_server/module.dart' as _i5;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -19,7 +21,13 @@ class Endpoints extends _i1.EndpointDispatch {
           server,
           'example',
           null,
-        )
+        ),
+      'todo': _i3.TodoEndpoint()
+        ..initialize(
+          server,
+          'todo',
+          null,
+        ),
     };
     connectors['example'] = _i1.EndpointConnector(
       name: 'example',
@@ -45,6 +53,66 @@ class Endpoints extends _i1.EndpointDispatch {
         )
       },
     );
-    modules['serverpod_auth'] = _i3.Endpoints()..initializeEndpoints(server);
+    connectors['todo'] = _i1.EndpointConnector(
+      name: 'todo',
+      endpoint: endpoints['todo']!,
+      methodConnectors: {
+        'getTodos': _i1.MethodConnector(
+          name: 'getTodos',
+          params: {
+            'userId': _i1.ParameterDescription(
+              name: 'userId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['todo'] as _i3.TodoEndpoint).getTodos(
+            session,
+            params['userId'],
+          ),
+        ),
+        'addTodo': _i1.MethodConnector(
+          name: 'addTodo',
+          params: {
+            'todo': _i1.ParameterDescription(
+              name: 'todo',
+              type: _i1.getType<_i4.Todo>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['todo'] as _i3.TodoEndpoint).addTodo(
+            session,
+            params['todo'],
+          ),
+        ),
+        'updateTodoStatus': _i1.MethodConnector(
+          name: 'updateTodoStatus',
+          params: {
+            'todo': _i1.ParameterDescription(
+              name: 'todo',
+              type: _i1.getType<_i4.Todo>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['todo'] as _i3.TodoEndpoint).updateTodoStatus(
+            session,
+            params['todo'],
+          ),
+        ),
+      },
+    );
+    modules['serverpod_auth'] = _i5.Endpoints()..initializeEndpoints(server);
   }
 }

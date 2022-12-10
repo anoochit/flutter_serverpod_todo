@@ -10,7 +10,8 @@ library protocol; // ignore_for_file: no_leading_underscores_for_library_prefixe
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'example_class.dart' as _i2;
 import 'todo_class.dart' as _i3;
-import 'package:serverpod_auth_client/module.dart' as _i4;
+import 'package:todos_client/src/protocol/todo_class.dart' as _i4;
+import 'package:serverpod_auth_client/module.dart' as _i5;
 export 'example_class.dart';
 export 'todo_class.dart';
 export 'client.dart'; // ignore_for_file: equal_keys_in_map
@@ -45,8 +46,13 @@ class Protocol extends _i1.SerializationManager {
     if (t == _i1.getType<_i3.Todo?>()) {
       return (data != null ? _i3.Todo.fromJson(data, this) : null) as T;
     }
+    if (t == _i1.getType<List<_i4.Todo>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<_i4.Todo>(e)).toList()
+          : null) as dynamic;
+    }
     try {
-      return _i4.Protocol().deserialize<T>(data, t);
+      return _i5.Protocol().deserialize<T>(data, t);
     } catch (_) {}
     return super.deserialize<T>(data, t);
   }
@@ -54,7 +60,7 @@ class Protocol extends _i1.SerializationManager {
   @override
   String? getClassNameForObject(Object data) {
     String? className;
-    className = _i4.Protocol().getClassNameForObject(data);
+    className = _i5.Protocol().getClassNameForObject(data);
     if (className != null) {
       return 'serverpod_auth.$className';
     }
@@ -71,7 +77,7 @@ class Protocol extends _i1.SerializationManager {
   dynamic deserializeByClassName(Map<String, dynamic> data) {
     if (data['className'].startsWith('serverpod_auth.')) {
       data['className'] = data['className'].substring(15);
-      return _i4.Protocol().deserializeByClassName(data);
+      return _i5.Protocol().deserializeByClassName(data);
     }
     if (data['className'] == 'Example') {
       return deserialize<_i2.Example>(data['data']);

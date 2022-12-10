@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
       title: 'Serverpod Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        useMaterial3: true,
+        useMaterial3: false,
       ),
       home: SignInPage(),
     );
