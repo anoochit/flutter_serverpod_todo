@@ -7,8 +7,6 @@ import 'package:todos_server/src/web/routes/root.dart';
 import 'src/generated/protocol.dart';
 import 'src/generated/endpoints.dart';
 
-import 'dart:io';
-
 // add serverpod auth server
 import 'package:serverpod_auth_server/module.dart' as auth;
 
@@ -32,11 +30,13 @@ void run(List<String> args) async {
     sendValidationEmail: (session, email, validationCode) async {
       // Send your validation email here.
       session.log('validationCode $validationCode');
+      sendEmail(email, validationCode, session);
       return true;
     },
     sendPasswordResetEmail: (session, userInfo, validationCode) async {
       // Send a password reset email here.
       session.log('validationCode $validationCode');
+      sendEmail(userInfo.email!, validationCode, session);
       return true;
     },
   ));
@@ -53,22 +53,21 @@ void run(List<String> args) async {
 sendEmail(String email, String validationCode, Session session) async {
   // TODO : send mail to mailhog
   final smtpServer = SmtpServer(
-    '10.0.2.2',
+    'localhost',
     port: 1025,
     allowInsecure: true,
   );
-
-  final body = "Your validation code is $validationCode ";
 
   final message = Message()
     ..from = Address("no-reply@example.com", "no-reply")
     ..recipients.add(email)
     ..subject = 'Validation code'
-    ..text = body;
+    ..text = "Your validation code is $validationCode"
+    ..html = "<h1>Validation code</h1>\n<p>Your validation code is $validationCode</p>";
 
   try {
     final sendReport = await send(message, smtpServer);
-    session.log('Send mail error ${sendReport}');
+    session.log('Send mail ${sendReport}');
   } on MailerException catch (e) {
     session.log('Message not sent: ${e.problems}');
   }
