@@ -1,11 +1,8 @@
-import 'dart:developer';
-
-import 'package:serverpod_auth_email_flutter/serverpod_auth_email_flutter.dart';
 import 'package:serverpod_auth_shared_flutter/serverpod_auth_shared_flutter.dart';
 import 'package:todos_client/todos_client.dart';
 import 'package:flutter/material.dart';
 import 'package:serverpod_flutter/serverpod_flutter.dart';
-import 'package:todos_flutter/home.dart';
+import 'package:todos_flutter/signin.dart';
 
 // Sets up a singleton client object that can be used to talk to the server from
 // anywhere in our app. The client is generated from your server code.
@@ -47,53 +44,5 @@ class MyApp extends StatelessWidget {
       ),
       home: SignInPage(),
     );
-  }
-}
-
-class SignInPage extends StatefulWidget {
-  const SignInPage({super.key});
-
-  @override
-  State<SignInPage> createState() => _SignInPageState();
-}
-
-class _SignInPageState extends State<SignInPage> {
-  // lisen session change
-  @override
-  void initState() {
-    super.initState();
-    sessionManager.addListener(() {
-      setState(() {
-        log("session change status");
-      });
-    });
-  }
-
-  // remove stream connection when terminate state
-  @override
-  void dispose() {
-    super.dispose();
-    client.removeStreamingConnectionStatusListener(
-      () {
-        setState(() {
-          log("remove session");
-        });
-      },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // if signed in return homepage
-    if (sessionManager.isSignedIn) {
-      return HomePage();
-    } else {
-      // return signin page
-      return Scaffold(
-        body: Center(
-          child: SignInWithEmailButton(caller: client.modules.auth),
-        ),
-      );
-    }
   }
 }
