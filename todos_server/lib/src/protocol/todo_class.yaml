@@ -1,0 +1,7 @@
+class: Todo
+table: todos
+fields:
+  title: String
+  isCompleted: bool
+  createdAt: DateTime
+  userId: int
