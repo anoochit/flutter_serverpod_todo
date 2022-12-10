@@ -18,12 +18,5 @@ services:
     command: redis-server --requirepass "Ed8rHD3O8LeRBLXqd7_myp-KhAJXiy0r"
     environment:
       - REDIS_REPLICATION_MODE=master
-  mailhog:
-    image: mailhog/mailhog
-    logging:
-      driver: 'none'  # disable saving logs
-    ports:
-      - 1025:1025 # smtp server
-      - 8025:8025 # web ui
 volumes:
   todos_data:

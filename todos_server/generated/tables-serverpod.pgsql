@@ -273,4 +273,3 @@ ALTER TABLE ONLY "serverpod_log"
     FOREIGN KEY("sessionLogId")
       REFERENCES serverpod_session_log(id)
         ON DELETE CASCADE;
-
