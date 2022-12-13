@@ -1,6 +1,7 @@
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 import 'package:serverpod/serverpod.dart';
+import 'package:todos_server/src/utils.dart';
 
 import 'package:todos_server/src/web/routes/root.dart';
 
@@ -48,27 +49,4 @@ void run(List<String> args) async {
 
   // Start the server.
   await pod.start();
-}
-
-sendEmail(String email, String validationCode, Session session) async {
-  // TODO : send mail to mailhog
-  final smtpServer = SmtpServer(
-    'localhost',
-    port: 1025,
-    allowInsecure: true,
-  );
-
-  final message = Message()
-    ..from = Address("no-reply@example.com", "no-reply")
-    ..recipients.add(email)
-    ..subject = 'Validation code'
-    ..text = "Your validation code is $validationCode"
-    ..html = "<h1>Validation code</h1>\n<p>Your validation code is $validationCode</p>";
-
-  try {
-    final sendReport = await send(message, smtpServer);
-    session.log('Send mail ${sendReport}');
-  } on MailerException catch (e) {
-    session.log('Message not sent: ${e.problems}');
-  }
 }
